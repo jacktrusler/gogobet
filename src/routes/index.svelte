@@ -1,32 +1,43 @@
+<script>
+	import { browser } from '$app/env';
+	import bear from "../lib/bearuwu.svg";
+	import { defaultEvmStores, web3, selectedAccount, connected, chainId, chainData } from 'svelte-web3';
+	import {page} from "$app/stores";
+
+	if (browser) {
+		defaultEvmStores.setBrowserProvider();
+	}
+
+	let address;
+	let currentBalance;
+	const query_balance = async () => {
+		if($web3.utils.isAddress(address)) currentBalance = $web3.utils.fromWei(await $web3.eth.getBalance(address)).toString() + " " + $chainData?.nativeCurrency?.symbol;
+		else currentBalance = "Not a valid address.";
+	}
+
+</script>
+
 <script context="module" lang="ts">
 	export const prerender = true;
 </script>
 
-<script lang="ts">
-	import Counter from '$lib/Counter.svelte';
-</script>
-
-<svelte:head>
-	<title>Home</title>
-</svelte:head>
 
 <section>
-	<h1>
-		<div class="welcome">
-			<picture>
-				<source srcset="svelte-welcome.webp" type="image/webp" />
-				<img src="svelte-welcome.png" alt="Welcome" />
-			</picture>
-		</div>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/index.svelte</strong>
-	</h2>
-
-	<Counter />
+	<div class="flex flex-col justify-center items-center">
+		<h1 class="font-bold text-yellow-600">GoGoBet!</h1>
+		<a href="/bet">
+			<img src={bear} alt="bearuwu" />
+			</a>
+			<h1 class="font-bold text-yellow-600">Click on GoGoBear to bet!</h1>
+			<p class="font-bold text-xl">change currency with metamask addon</p>
+		<p class="font-bold text-xl">{$chainData?.name} </p>
+		<p>Native Currency: {$chainData?.nativeCurrency?.name} ({$chainData?.nativeCurrency?.symbol})</p>
+	</div>
+	<form on:submit|preventDefault={query_balance} class="m-2 p-2">
+		<input bind:value={address} class="h-9 wallet-address-box p-3" placeholder="Input Wallet Address"/>
+		<button type="submit">Get Balance</button>
+	</form>
+		<div bind:textContent={currentBalance} contenteditable="false"></div>
 </section>
 
 <style>
@@ -42,18 +53,7 @@
 		width: 100%;
 	}
 
-	.welcome {
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
+	.wallet-address-box {
+		border-radius: 10px;
 	}
 </style>
