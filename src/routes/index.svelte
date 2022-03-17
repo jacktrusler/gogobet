@@ -67,12 +67,6 @@
 		<p class="font-bold text-xl">{$chainData?.name} </p>
 		<p>Native Currency: {$chainData?.nativeCurrency?.name} ({$chainData?.nativeCurrency?.symbol})</p>
 	</div>
-	<form on:submit|preventDefault={query_balance} class="m-2 p-2">
-		<input bind:value={address} class="h-9 wallet-address-box p-3" placeholder="Input Wallet Address"/>
-		<button type="submit">Get Balance</button>
-	</form>
-		<div bind:textContent={currentBalance} contenteditable="false"></div>
-		<button class="text-2xl address-button" on:click={logger}>my address</button>
 
 		<form on:submit|preventDefault={validate}>
 			<div class='p-3'></div>
@@ -82,7 +76,7 @@
 			<div class='p-3'></div>
 			<input bind:value={passwordVerify} class="h-9 wallet-address-box p-3" placeholder="Re-enter Password">
 			<div class='p-3'></div>
-			<button type="submit">Submit</button>
+			<button type="submit" on:click={logger}>Submit</button>
 		</form>
 </section>
 
